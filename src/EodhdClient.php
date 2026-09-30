@@ -5,6 +5,7 @@ namespace Shredio\EodhdClient;
 use DateTimeInterface;
 use Shredio\EodhdClient\Config\HttpClientRetryConfiguration;
 use Shredio\EodhdClient\Enum\PricePeriod;
+use Shredio\EodhdClient\Exception\UnexpectedHttpCodeException;
 use Shredio\EodhdClient\Payload\BulkDividend;
 use Shredio\EodhdClient\Payload\BulkEndOfDayPrice;
 use Shredio\EodhdClient\Payload\BulkSplit;
@@ -19,10 +20,13 @@ use Shredio\EodhdClient\Payload\RealTimeQuote;
 use Shredio\EodhdClient\Payload\Split;
 use Shredio\EodhdClient\Payload\User;
 use Shredio\EodhdClient\Promise\EodhdPromise;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * Symbols are EODHD tickers including the exchange suffix, e.g. `AAPL.US`, `CEZ.PR` or `SAP.XETRA`.
+ *
+ * A method returning an iterable sends its request lazily, so its exceptions surface while it is iterated.
  */
 interface EodhdClient
 {
@@ -47,12 +51,16 @@ interface EodhdClient
 	 * Subscription and today's API usage of the account.
 	 *
 	 * @see https://eodhd.com/api/user
+	 * @throws UnexpectedHttpCodeException the API answered with an unexpected status code
+	 * @throws ExceptionInterface a transport or decoding failure
 	 */
 	public function user(): ?User;
 
 	/**
 	 * @see https://eodhd.com/api/exchanges-list/
 	 * @return iterable<int, Exchange>
+	 * @throws UnexpectedHttpCodeException the API answered with an unexpected status code
+	 * @throws ExceptionInterface a transport or decoding failure
 	 */
 	public function exchangesList(): iterable;
 
@@ -61,6 +69,8 @@ interface EodhdClient
 	 * @param non-empty-string $exchange EODHD exchange code, e.g. `US`, `PR`, `XETRA`
 	 * @param bool $delisted True lists only the delisted symbols
 	 * @return iterable<int, ExchangeSymbol>
+	 * @throws UnexpectedHttpCodeException the API answered with an unexpected status code
+	 * @throws ExceptionInterface a transport or decoding failure
 	 */
 	public function exchangeSymbolList(string $exchange, bool $delisted = false): iterable;
 
@@ -71,6 +81,8 @@ interface EodhdClient
 	 * @see https://eodhd.com/api/fundamentals/{SYMBOL}
 	 * @param non-empty-string $symbol
 	 * @return Fundamentals|null Null when the symbol is unknown or has no fundamentals (e.g. some ETFs)
+	 * @throws UnexpectedHttpCodeException the API answered with an unexpected status code
+	 * @throws ExceptionInterface a transport or decoding failure
 	 */
 	public function fundamentals(string $symbol): ?Fundamentals;
 
@@ -78,6 +90,8 @@ interface EodhdClient
 	 * @see https://eodhd.com/api/eod/{SYMBOL}
 	 * @param non-empty-string $symbol
 	 * @return iterable<int, EndOfDayPrice> Oldest first; empty when the symbol is unknown
+	 * @throws UnexpectedHttpCodeException the API answered with an unexpected status code
+	 * @throws ExceptionInterface a transport or decoding failure
 	 */
 	public function endOfDayPrices(
 		string $symbol,
@@ -94,6 +108,8 @@ interface EodhdClient
 	 * @param DateTimeInterface|null $date Last trading day when null
 	 * @param list<non-empty-string> $symbols Limits the response to these symbols
 	 * @return iterable<int, BulkEndOfDayPrice>
+	 * @throws UnexpectedHttpCodeException the API answered with an unexpected status code
+	 * @throws ExceptionInterface a transport or decoding failure
 	 */
 	public function bulkEndOfDayPrices(string $exchange, ?DateTimeInterface $date = null, array $symbols = []): iterable;
 
@@ -103,6 +119,8 @@ interface EodhdClient
 	 * @see https://eodhd.com/api/real-time/{SYMBOL}
 	 * @param non-empty-list<non-empty-string> $symbols
 	 * @return iterable<int, RealTimeQuote>
+	 * @throws UnexpectedHttpCodeException the API answered with an unexpected status code
+	 * @throws ExceptionInterface a transport or decoding failure
 	 */
 	public function realTimeQuotes(array $symbols): iterable;
 
@@ -110,6 +128,8 @@ interface EodhdClient
 	 * @see https://eodhd.com/api/div/{SYMBOL}
 	 * @param non-empty-string $symbol
 	 * @return iterable<int, Dividend> Oldest first; empty when the symbol is unknown
+	 * @throws UnexpectedHttpCodeException the API answered with an unexpected status code
+	 * @throws ExceptionInterface a transport or decoding failure
 	 */
 	public function dividends(string $symbol, ?DateTimeInterface $from = null, ?DateTimeInterface $to = null): iterable;
 
@@ -120,6 +140,8 @@ interface EodhdClient
 	 * @param non-empty-string $exchange
 	 * @param DateTimeInterface|null $date Last trading day when null
 	 * @return iterable<int, BulkDividend>
+	 * @throws UnexpectedHttpCodeException the API answered with an unexpected status code
+	 * @throws ExceptionInterface a transport or decoding failure
 	 */
 	public function bulkDividends(string $exchange, ?DateTimeInterface $date = null): iterable;
 
@@ -129,6 +151,8 @@ interface EodhdClient
 	 * @see https://eodhd.com/api/splits/{SYMBOL}
 	 * @param non-empty-string $symbol
 	 * @return iterable<int, Split> Oldest first; empty when the symbol is unknown
+	 * @throws UnexpectedHttpCodeException the API answered with an unexpected status code
+	 * @throws ExceptionInterface a transport or decoding failure
 	 */
 	public function splits(string $symbol, ?DateTimeInterface $from = null, ?DateTimeInterface $to = null): iterable;
 
@@ -139,6 +163,8 @@ interface EodhdClient
 	 * @param non-empty-string $exchange
 	 * @param DateTimeInterface|null $date Last trading day when null
 	 * @return iterable<int, BulkSplit>
+	 * @throws UnexpectedHttpCodeException the API answered with an unexpected status code
+	 * @throws ExceptionInterface a transport or decoding failure
 	 */
 	public function bulkSplits(string $exchange, ?DateTimeInterface $date = null): iterable;
 
@@ -150,6 +176,8 @@ interface EodhdClient
 	 * @param DateTimeInterface|null $to Seven days after `$from` when null
 	 * @param list<non-empty-string> $symbols Limits the calendar to these symbols; the date range still applies
 	 * @return iterable<int, EarningsCalendarItem>
+	 * @throws UnexpectedHttpCodeException the API answered with an unexpected status code
+	 * @throws ExceptionInterface a transport or decoding failure
 	 */
 	public function earningsCalendar(?DateTimeInterface $from = null, ?DateTimeInterface $to = null, array $symbols = []): iterable;
 
@@ -159,6 +187,8 @@ interface EodhdClient
 	 * @see https://eodhd.com/api/calendar/trends
 	 * @param non-empty-list<non-empty-string> $symbols
 	 * @return iterable<int, EarningsTrend>
+	 * @throws UnexpectedHttpCodeException the API answered with an unexpected status code
+	 * @throws ExceptionInterface a transport or decoding failure
 	 */
 	public function earningsTrends(array $symbols): iterable;
 
@@ -166,6 +196,8 @@ interface EodhdClient
 	 * Sends a raw request with the API token and `fmt=json` added.
 	 *
 	 * @param array<string, scalar|null> $query
+	 * @throws UnexpectedHttpCodeException the API answered with an unexpected status code
+	 * @throws ExceptionInterface a transport or decoding failure
 	 */
 	public function request(string $path, array $query = []): ResponseInterface;
 

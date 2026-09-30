@@ -3,6 +3,7 @@
 namespace Shredio\EodhdClient\Promise;
 
 use Fiber;
+use Throwable;
 
 /**
  * @template-covariant T
@@ -21,6 +22,7 @@ final readonly class EodhdPromise
 
 	/**
 	 * @return T
+	 * @throws Throwable whatever the callable threw
 	 */
 	public function await(): mixed
 	{
