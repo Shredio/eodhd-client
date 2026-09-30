@@ -1,0 +1,1 @@
+{"name": "Jane Doe", "email": "jane.doe@example.com", "subscriptionType": "monthly", "paymentMethod": "Card", "apiRequests": 42, "apiRequestsDate": "2026-01-01", "dailyRateLimit": 1000, "extraLimit": 0, "inviteToken": null, "inviteTokenClicked": 0, "subscriptionMode": "paid", "canManageOrganizations": false}

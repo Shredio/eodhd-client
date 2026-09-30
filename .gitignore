@@ -1,0 +1,12 @@
+## IDE
+.idea
+
+## AI
+.claude
+
+## composer
+composer.lock
+vendor
+
+.phpunit.result.cache
+.phpunit.cache
