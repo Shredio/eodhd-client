@@ -21,7 +21,7 @@ final class CacheEodhdClientTest extends TestCase
 		);
 
 		$first = iterator_to_array($client->dividends('CEZ.PR'), false);
-		self::assertTrue($cache->has('eodhd-client.v1.dividends.CEZ.PR.any.any'));
+		self::assertTrue($cache->has('eodhd-client.v2.dividends.CEZ.PR.any.any'));
 
 		$second = iterator_to_array($client->dividends('CEZ.PR'), false);
 

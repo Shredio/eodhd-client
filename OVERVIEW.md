@@ -555,6 +555,7 @@ Returned by `earningsTrends()` and inside `Fundamentals::$earningsTrends`. `code
 | `cusip` | `non-empty-string\|null` | `CUSIP` (optional) |
 | `homeCategory` | `non-empty-string\|null` | `HomeCategory` (optional) |
 | `isDelisted` | `bool\|null` | `IsDelisted` (optional) |
+| `operatingMic` | `non-empty-string\|null` | `OperatingMIC` (optional; ISO 10383 operating MIC of the exchange, e.g. XPRA, XBSE; sent since 2026-10-14 at the latest) |
 
 #### `CompanyAddress`
 

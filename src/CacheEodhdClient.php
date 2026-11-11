@@ -34,7 +34,7 @@ final readonly class CacheEodhdClient implements EodhdClient
 	 * Part of every cache key. Bump it whenever a cached payload changes shape: an entry serialized with the old
 	 * shape would be unserialized with the new properties uninitialized.
 	 */
-	private const int CacheKeyVersion = 1;
+	private const int CacheKeyVersion = 2;
 
 	private const string DateFormat = 'Y-m-d';
 

@@ -10,7 +10,7 @@ use Shredio\TypeSchemaCompiler\Attribute\CompilePropertyOptions;
  * @phpstan-import-type CompanyAddressArray from CompanyAddress
  * @phpstan-import-type CompanyListingArray from CompanyListing
  * @phpstan-import-type CompanyOfficerArray from CompanyOfficer
- * @phpstan-type CompanyGeneralArray array{code: non-empty-string, type: non-empty-string|null, name: non-empty-string, exchange: non-empty-string, currencyCode: non-empty-string|null, currencyName: non-empty-string|null, currencySymbol: non-empty-string|null, countryName: non-empty-string|null, countryIso: non-empty-string|null, openFigi: non-empty-string|null, isin: non-empty-string|null, lei: non-empty-string|null, primaryTicker: non-empty-string|null, cik: non-empty-string|null, employerIdNumber: non-empty-string|null, fiscalYearEnd: non-empty-string|null, ipoDate: non-empty-string|null, internationalDomestic: non-empty-string|null, sector: non-empty-string|null, industry: non-empty-string|null, gicSector: non-empty-string|null, gicGroup: non-empty-string|null, gicIndustry: non-empty-string|null, gicSubIndustry: non-empty-string|null, description: non-empty-string|null, address: non-empty-string|null, addressData: CompanyAddressArray|null, listings: list<CompanyListingArray>, officers: list<CompanyOfficerArray>, phone: non-empty-string|null, webUrl: non-empty-string|null, logoUrl: non-empty-string|null, fullTimeEmployees: int|null, updatedAt: non-empty-string|null, cusip: non-empty-string|null, homeCategory: non-empty-string|null, isDelisted: bool|null}
+ * @phpstan-type CompanyGeneralArray array{code: non-empty-string, type: non-empty-string|null, name: non-empty-string, exchange: non-empty-string, currencyCode: non-empty-string|null, currencyName: non-empty-string|null, currencySymbol: non-empty-string|null, countryName: non-empty-string|null, countryIso: non-empty-string|null, openFigi: non-empty-string|null, isin: non-empty-string|null, lei: non-empty-string|null, primaryTicker: non-empty-string|null, cik: non-empty-string|null, employerIdNumber: non-empty-string|null, fiscalYearEnd: non-empty-string|null, ipoDate: non-empty-string|null, internationalDomestic: non-empty-string|null, sector: non-empty-string|null, industry: non-empty-string|null, gicSector: non-empty-string|null, gicGroup: non-empty-string|null, gicIndustry: non-empty-string|null, gicSubIndustry: non-empty-string|null, description: non-empty-string|null, address: non-empty-string|null, addressData: CompanyAddressArray|null, listings: list<CompanyListingArray>, officers: list<CompanyOfficerArray>, phone: non-empty-string|null, webUrl: non-empty-string|null, logoUrl: non-empty-string|null, fullTimeEmployees: int|null, updatedAt: non-empty-string|null, cusip: non-empty-string|null, homeCategory: non-empty-string|null, isDelisted: bool|null, operatingMic: non-empty-string|null}
  */
 #[CompileObjectMapper(identifier: 'code')]
 final readonly class CompanyGeneral
@@ -51,6 +51,7 @@ final readonly class CompanyGeneral
 	 * @param non-empty-string|null $updatedAt
 	 * @param non-empty-string|null $cusip
 	 * @param non-empty-string|null $homeCategory
+	 * @param non-empty-string|null $operatingMic ISO 10383 operating MIC of the exchange (XPRA, XBSE), sent since 2026-10-14 at the latest
 	 */
 	public function __construct(
 		#[CompilePropertyOptions(name: 'Code')]
@@ -127,6 +128,8 @@ final readonly class CompanyGeneral
 		public ?string $homeCategory = null,
 		#[CompilePropertyOptions(name: 'IsDelisted')]
 		public ?bool $isDelisted = null,
+		#[CompilePropertyOptions(name: 'OperatingMIC')]
+		public ?string $operatingMic = null,
 	)
 	{
 	}
@@ -174,6 +177,7 @@ final readonly class CompanyGeneral
 			'cusip' => $this->cusip,
 			'homeCategory' => $this->homeCategory,
 			'isDelisted' => $this->isDelisted,
+			'operatingMic' => $this->operatingMic,
 		];
 	}
 

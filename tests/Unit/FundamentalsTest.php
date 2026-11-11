@@ -258,6 +258,56 @@ final class FundamentalsTest extends TestCase
 		);
 	}
 
+	/**
+	 * Since 2026-10-14 at the latest the General section carries the exchange's operating MIC.
+	 */
+	public function testGeneralWithOperatingMic(): void
+	{
+		$fundamentals = $this->createClient('fundamentals-ATOMT.PR.json')->fundamentals('ATOMT.PR');
+
+		self::assertNotNull($fundamentals);
+		self::assertSame([
+			'code' => 'ATOMT',
+			'type' => 'Common Stock',
+			'name' => 'AtomTrace a.s.',
+			'exchange' => 'PR',
+			'currencyCode' => 'CZK',
+			'currencyName' => 'Czech koruna',
+			'currencySymbol' => 'Kč',
+			'countryName' => 'Czech Republic',
+			'countryIso' => 'CZ',
+			'openFigi' => null,
+			'isin' => null,
+			'lei' => null,
+			'primaryTicker' => null,
+			'cik' => null,
+			'employerIdNumber' => null,
+			'fiscalYearEnd' => 'December',
+			'ipoDate' => null,
+			'internationalDomestic' => null,
+			'sector' => 'Technology',
+			'industry' => 'Scientific & Technical Instruments',
+			'gicSector' => null,
+			'gicGroup' => null,
+			'gicIndustry' => null,
+			'gicSubIndustry' => null,
+			'description' => $this->readFixture('fundamentals-ATOMT.PR.json')['General']['Description'],
+			'address' => 'Kolejní 3094/9, Brno, Czech Republic, 61200',
+			'addressData' => (new CompanyAddress('Czech Republic', 'Kolejní 3094/9', 'Brno', null, '61200'))->toArray(),
+			'listings' => [],
+			'officers' => [],
+			'phone' => null,
+			'webUrl' => 'https://www.atomtrace.com',
+			'logoUrl' => null,
+			'fullTimeEmployees' => 5,
+			'updatedAt' => '2026-04-18',
+			'cusip' => null,
+			'homeCategory' => null,
+			'isDelisted' => null,
+			'operatingMic' => 'XPRA',
+		], $fundamentals->general->toArray());
+	}
+
 	public function testWithoutFinancialStatements(): void
 	{
 		$fundamentals = $this->createClient('fundamentals-BEZVA.PR.json')->fundamentals('BEZVA.PR');

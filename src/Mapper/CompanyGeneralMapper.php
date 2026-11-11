@@ -66,6 +66,7 @@ final readonly class CompanyGeneralMapper extends Type
 			'CUSIP' => $ts->optional($ts->nullable($ts->nonEmptyString())),
 			'HomeCategory' => $ts->optional($ts->nullable($ts->nonEmptyString())),
 			'IsDelisted' => $ts->optional($ts->nullable($ts->bool())),
+			'OperatingMIC' => $ts->optional($ts->nullable($ts->nonEmptyString())),
 		],
 			identifier: 'Code',
 		);
@@ -131,7 +132,11 @@ final readonly class CompanyGeneralMapper extends Type
 			$reindexedValues['isDelisted'] = $values['IsDelisted'];
 		}
 
-		unset($values['Code'], $values['Type'], $values['Name'], $values['Exchange'], $values['CurrencyCode'], $values['CurrencyName'], $values['CurrencySymbol'], $values['CountryName'], $values['CountryISO'], $values['OpenFigi'], $values['ISIN'], $values['LEI'], $values['PrimaryTicker'], $values['CIK'], $values['EmployerIdNumber'], $values['FiscalYearEnd'], $values['IPODate'], $values['InternationalDomestic'], $values['Sector'], $values['Industry'], $values['GicSector'], $values['GicGroup'], $values['GicIndustry'], $values['GicSubIndustry'], $values['Description'], $values['Address'], $values['AddressData'], $values['Listings'], $values['Officers'], $values['Phone'], $values['WebURL'], $values['LogoURL'], $values['FullTimeEmployees'], $values['UpdatedAt'], $values['CUSIP'], $values['HomeCategory'], $values['IsDelisted']);
+		if (array_key_exists('OperatingMIC', $values)) {
+			$reindexedValues['operatingMic'] = $values['OperatingMIC'];
+		}
+
+		unset($values['Code'], $values['Type'], $values['Name'], $values['Exchange'], $values['CurrencyCode'], $values['CurrencyName'], $values['CurrencySymbol'], $values['CountryName'], $values['CountryISO'], $values['OpenFigi'], $values['ISIN'], $values['LEI'], $values['PrimaryTicker'], $values['CIK'], $values['EmployerIdNumber'], $values['FiscalYearEnd'], $values['IPODate'], $values['InternationalDomestic'], $values['Sector'], $values['Industry'], $values['GicSector'], $values['GicGroup'], $values['GicIndustry'], $values['GicSubIndustry'], $values['Description'], $values['Address'], $values['AddressData'], $values['Listings'], $values['Officers'], $values['Phone'], $values['WebURL'], $values['LogoURL'], $values['FullTimeEmployees'], $values['UpdatedAt'], $values['CUSIP'], $values['HomeCategory'], $values['IsDelisted'], $values['OperatingMIC']);
 		$values = $reindexedValues + $values;
 
 		// 4. Create a new instance
